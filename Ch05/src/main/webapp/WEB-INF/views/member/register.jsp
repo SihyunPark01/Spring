@@ -8,7 +8,7 @@
 <body>
 	<h3>직원등록</h3>
 	
-	<form action="/ch07/member/register.do" method="post">
+	<form action="/ch07/member/register" method="post">
 		
 	<table border="1">
 		

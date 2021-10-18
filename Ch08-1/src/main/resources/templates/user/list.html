@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>list</title>
+</head>
+<body>
+	<h3>User 목록</h3>
+
+	<table border = "1">
+		<tr>
+			<th>아이디</th>
+			<th>이름</th>
+			<th>휴대폰</th>
+			<th>나이</th>
+			<th>관리</th>
+		</tr>
+		
+		<tr th:each="user:${users}">
+			<td>[[${user.uid}]]</td>
+			<td>[[${user.name}]]</td>
+			<td>[[${user.hp}]]</td>
+			<td>[[${user.age}]]</td>
+			<td>
+				<a th:href="@{/user/modify(uid=${user.uid})}">수정</a> <!-- 타임리프의 파라미터 잡는 방법 잘봐-->
+				<a th:href="@{/user/delete(uid=${user.uid})}">삭제</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

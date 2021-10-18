@@ -10,7 +10,7 @@
 </head>
 <body>
 	<h3>직원목록</h3>
-	<a href="/ch07/member/register.do"> 직원등록 </a>
+	<a href="/ch05/member/register"> 직원등록 </a>
 	<table border="1">
 		<tr>
 			<th>아이디</th>
@@ -22,23 +22,22 @@
 			<th>기타</th>
 		</tr>
 		
-		<c:forEach var="member" items="${members}">
+		<c:forEach var="member" items="#{members}">
 		<tr>
-			<td>${member.uid}</td>
-			<td>${member.name}</td>
-			<td>${member.hp}</td>
-			<td>${member.pos}</td>
-			<td>${member.dep}</td>
-			<td>${member.rdate.substring(2,10)}</td>
+			<td>#{member.uid}</td>
+			<td>#{member.name}</td>
+			<td>#{member.hp}</td>
+			<td>#{member.pos}</td>
+			<td>#{member.dep}</td>
+			<td>#{member.rdate.substring(2,10)}</td>
 			<td>
-				<a href="/ch07/member/modify.do?uid=${member.uid}">수정</a>
-				<a href="/ch07/member/delete.do?uid=${member.uid}">삭제</a>
+				<a href="/ch07/member/modify?uid=#{member.uid}">수정</a>
+				<a href="/ch07/member/delete?uid=#{member.uid}">삭제</a>
 			</td>
 		</tr>	
 		</c:forEach>
 	
 	</table>
 	
-
 </body>
 </html>

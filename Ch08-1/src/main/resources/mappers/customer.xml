@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ch08.dao.CustomerDao">
+ 	<insert id="insertCustomer">
+ 		INSERT INTO `Customer` VALUES (#{custid}, #{name}, #{address}, #{phone});
+ 	</insert>
+
+ 	<select id="selectCustomer" resultType="kr.co.ch08.vo.CustomerVo">
+ 		SELECT * FROM `Customer` WHERE `custid`=#{custid};
+ 	</select>
+
+ 	<select id="selectCustomers" resultType="kr.co.ch08.vo.CustomerVo" >
+ 		SELECT * FROM `Customer`;
+ 	</select>
+
+ 	<update id="updateCustomer">
+ 		UPDATE `Customer` SET 
+	 		`name`=#{name},
+	 		`address`=#{address},
+	 		`phone`=#{phone}
+ 		WHERE 
+ 			`custid`=#{custid};
+ 	</update>
+
+ 	<delete id="deleteCustomer">
+ 		DELETE FROM `Customer` WHERE `custid`=#{custid};
+ 	</delete>
+
+</mapper>

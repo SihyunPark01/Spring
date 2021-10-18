@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+	<!-- 
+		Spring boot 초기설정 
+		1) livereload 설정
+		- Chrome 웹스토어 livereload 확장 플러그인 설치
+		- application.properties - livereload 설정
+		
+		2) lombok 설정
+		- 설정메뉴얼 참고
+	-->
+</head>	
+<body>
+	<h3>[[${title}]]</h3>
+	<h3 th:text="${hello}">제목</h3>
+	
+	<h4>타임리프 조건문</h4>
+	<p>
+		
+		<a href="#" th:if="${userVo}">[[${userVo.name}]]님 반갑습니다.</a>    <!-- userVo != null과 같은뜻 -->
+		<a href="#" th:unless="${userVo}">user 정보가 없습니다.</a>
+	</p>	
+	
+	<p th:switch="${userVo.age > 20}">
+		<span th:case="true">성인 입니다.</span>
+		<span th:case="false">미성년자 입니다.</span>
+	</p>
+
+	<h4>타임리프 반복문</h4>
+
+	<table border="1">
+		<tr th:each="user:${users}">
+			<td th:text="${user.uid}">아이디</td>
+			<td th:text="${user.name}">이름</td>
+			<td th:text="${user.hp}">휴대폰</td>
+			<td th:text="${user.age}">나이</td>
+		</tr>
+	</table>
+	
+	<h4>타임리프 링크</h4>
+	<a th:href="@{/include}">타임리프 인클루드 실습이동</a>
+
+</body>
+</html>

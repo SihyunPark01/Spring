@@ -10,24 +10,24 @@
 <body>
 	<h3>직원수정</h3>
 	
-	<form action="/ch07/member/modify.do" method="post">
+	<form action="/ch07/member/modify" method="post">
 		
 	<table border="1">
 		
 		
 		<tr>
 			<td>아이디</td>
-			<td><input type="text" name="uid" value="${member.uid}"/></td>
+			<td><input type="text" name="uid" value="#{member.uid}"/></td>
 		</tr>
 		
 		<tr>
 			<td>이름</td>
-			<td><input type="text" name="name" value="${member.name}"/></td>
+			<td><input type="text" name="name" value="#{member.name}"/></td>
 		</tr>
 		
 		<tr>
 			<td>휴대폰</td>
-			<td><input type="text" name="hp" value="${member.hp}"/></td>
+			<td><input type="text" name="hp" value="#{member.hp}"/></td>
 		</tr>
 		
 		<tr>
