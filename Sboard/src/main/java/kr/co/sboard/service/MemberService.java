@@ -23,12 +23,29 @@ public class MemberService {
 		return dao.selectTerms();
 	}
 	
-	public MemberVo selectMember(String uid) {
-		return dao.selectMember(uid);
+	public MemberVo selectMember(String uid, String pass) {
+		return dao.selectMember(uid, pass);
 	}
 	public List<MemberVo> selectMembers(){
 		return dao.selectMembers();
 	}
+	
+	public int selectCountUid(String uid) {
+		return dao.selectCountUid(uid);
+	};
+	
+	public int selectCountNick(String nick) {
+		return dao.selectCountNick(nick);
+	};
+	
+	public int selectCountEmail(String email) {
+		return dao.selectCountEmail(email);
+	};
+
+	public int selectCountHp(String hp) {
+		return dao.selectCountHp(hp);
+	};
+	
 	public void updateMember(MemberVo vo){
 		dao.updateMember(vo);
 	}

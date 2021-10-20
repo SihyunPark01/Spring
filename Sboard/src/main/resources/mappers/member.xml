@@ -23,11 +23,28 @@
 	</select>
 	
 	<select id="selectMember" resultType="kr.co.sboard.vo.MemberVo">
-
+		SELECT * FROM `Jboard_member` WHERE `uid`=#{uid} AND `pass`=PASSWORD(#{pass});
 	</select>
 	
 	<select id="selectMembers" resultType="kr.co.sboard.vo.MemberVo">
 
+	</select>
+	
+	
+	<select id="selectCountUid" resultType="int">
+		SELECT COUNT(`uid`) FROM `Jboard_member` WHERE `uid`=#{uid};<!-- 밑의 쿼리문의 결과값이 1아니면 0이니까 int로... -->
+	</select>
+
+	<select id="selectCountNick" resultType="int">
+		SELECT COUNT(`nick`) FROM `Jboard_member` WHERE `nick`=#{nick};<!-- 밑의 쿼리문의 결과값이 1아니면 0이니까 int로... -->
+	</select>
+
+	<select id="selectCountEmail" resultType="int">
+		SELECT COUNT(`email`) FROM `Jboard_member` WHERE `email`=#{email};<!-- 밑의 쿼리문의 결과값이 1아니면 0이니까 int로... -->
+	</select>
+	
+	<select id="selectCountHp" resultType="int">
+		SELECT COUNT(`hp`) FROM `Jboard_member` WHERE `hp`=#{hp};<!-- 밑의 쿼리문의 결과값이 1아니면 0이니까 int로... -->
 	</select>
 	
 	<update id="updateMember">
