@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>글목록</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">    
+</head>
+<body>
+    <div id="wrapper">
+     <th:block th:include="@{/_header.html}"></th:block>
+     <th:block th:include="@{/board/_aside__${group}__.html}"></th:block>
+     
+        <section id="board" class="list">
+            <h3>글목록</h3>
+            <article>
+                <p>
+                   	홍길동님 반갑습니다. <!-- sessionScope가 타임리프에서는 session임-->
+                    <a th:href="@{/member/logout}" class="logout">[로그아웃]</a>
+                </p>
+                <table border="0">
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>글쓴이</th>
+                        <th>날짜</th>
+                        <th>조회</th>
+                    </tr>
+                   
+                    <tr>
+                        <td>1</td>
+                        <td><a th:href="@{/board/view(group=${group})}">글제목입니다.</a>&nbsp;&#91;[1]&#93;</td>
+                        <td>홍길동</td> <!-- nick이 없으니 테이블 조인해야지 -->
+                        <td>21-10-30</td>
+                        <td>[1]</td>
+                    </tr>
+                </table>
+            </article>
+
+            <!-- 페이지 네비게이션 -->
+            <div class="paging">
+            	
+                	<a th:href="@{#}" class="prev">이전</a>
+                	<a th:href="@{#}" class="num"></a>
+                	<a th:href="@{#}" class="next">다음</a>
+            </div>
+
+            <!-- 글쓰기 버튼 -->
+            <a th:href="@{/board/write(group=${group})}" class="btnWrite">글쓰기</a>
+
+        </section>
+        
+         <!-- 내용 끝 -->
+
+                </article>
+            </section>
+
+        </div>
+        
+        
+        
+        
+        <th:block th:include="/_footer.html"></th:block>
+    </div>    
+</body>
+</html>
