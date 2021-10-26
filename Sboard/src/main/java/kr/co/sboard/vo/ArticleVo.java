@@ -25,4 +25,5 @@ public class ArticleVo {
 	//추가필드
 	private MultipartFile fname;
 	private String nick;
+	private FileVo fileVo;
 }

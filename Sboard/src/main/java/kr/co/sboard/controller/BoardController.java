@@ -1,13 +1,9 @@
 package kr.co.sboard.controller;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.sboard.service.BoardService;
 import kr.co.sboard.vo.ArticleVo;
@@ -65,7 +60,12 @@ public class BoardController {
 	}
 	
 	@GetMapping("/view")
-	public String view() {
+	public String view(int seq, Model model) {//뷰페이지에서 사용할거면 model객체에 담아야 하는군
+		
+		ArticleVo vo = service.selectArticle(seq);
+		List<ArticleVo> comments =  service.selectComments(seq);
+		model.addAttribute("comments",comments);
+		model.addAttribute(vo);
 		return "/view";
 	}
 	
@@ -91,6 +91,8 @@ public class BoardController {
 		} else {
 			// 파일을 첨부 했을 때 
 			//System.out.println("파일첨부 함");  이부분 모두 BoardService에 비즈니스 처리 로직 구현메서드로 옮김
+			vo.setFile(1);
+			seq = service.insertArticle(vo);
 			FileVo fvo = service.fileUpload(vo.getFname(), seq);
 			service.insertFile(fvo);
 		}
@@ -99,8 +101,67 @@ public class BoardController {
 		return "redirect:/list";
 	}
 	
+	@GetMapping("/fileDownload")
+	public void fileDownload(int fseq, HttpServletResponse resp) {
+		
+		// 다운로드 카운트 + 1
+		service.updateFileDownload(fseq);
+		// 파일정보 가져오기  ---- service로 다 옮김
+		FileVo fileVo = service.selectFile(fseq);
+		// 파일 다운로드 수행
+		service.fileDownload(resp, fileVo);
+	}
+	
 	@GetMapping("/modify")
-	public String modify() {
+	public String modify(int seq, Model model) {
+		ArticleVo vo = service.selectArticle(seq);
+		model.addAttribute(vo);
 		return "/modify";
 	}
+	
+	@PostMapping("/modify")
+	public String modify(ArticleVo vo) {
+		
+		service.updateArticle(vo);
+		int seq = vo.getSeq();
+		if(vo.getFname().isEmpty()) { 
+			vo.setFile(0);
+			seq = service.insertArticle(vo); //확인용 할땐 잠시 주석처리 / 작성글 삽입하고 글번호를 받아야함
+		} else {
+			vo.setFile(1);
+			seq = service.insertArticle(vo);
+			FileVo fvo = service.fileUpload(vo.getFname(), seq);
+			service.insertFile(fvo);
+		}
+		return "redirect:/view?seq="+vo.getSeq();
+	}
+	
+	@GetMapping("/delete")
+	public String delete(int seq) {
+		service.deleteArticle(seq);
+		return "redirect:/list";
+	}
+	
+
+	@PostMapping("/insertComment")
+	public String insertcomment(ArticleVo vo) {
+		service.insertComment(vo);
+
+		return "redirect:/view?seq="+vo.getParent();
+	}
+	
+	@GetMapping("/deleteComment")
+	public String deletecomment(int seq, int parent) {
+		service.deleteComment(seq);
+
+		return "redirect:/view?seq="+parent;
+	}
+	
+	
+	@GetMapping("/updateComment")
+	public String updatecomment(int seq, int parent) {
+		service.updateComment(seq);
+		return "redirect:/view?seq="+parent;
+	}
+	
 }
