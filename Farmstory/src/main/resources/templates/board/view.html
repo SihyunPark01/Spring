@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <title>글보기</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+     <script th:inline="javascript">
+		var success = [[${success}]]
+		if(success == 100){
+			alert('일치하는 회원이 없습니다.\n아이디, 비밀번호를 다시 확인해 주세요.');
+		}else if(success == 101){
+			alert('정상적으로 로그아웃이 되었습니다.');
+		}else if(success == 102){
+			alert('먼저 로그인을 하셔야 합니다.');
+		}else if(success == 103){
+			alert('글 작성을 위해 로그인을 하셔야 합니다.');
+		}
+    </script>
 </head>
 <body>
     <div id="wrapper">
@@ -14,25 +28,26 @@
             <table>
                 <tr>
                     <td>제목</td>
-                    <td><input type="text" name="title" readonly/>사랑합니다 고객님</td>
+                    <td><input type="text" name="title" th:value="${articleVo.title}" readonly/></td>
                 </tr>
+                <tr th:if="${articleVo.file == 1}">
                     <td>첨부파일</td>
                     <td>
-                        <a href="@{#}">파일이름</a>
-                        <span>0회 다운로드</span>
+                        <a th:href="@{#}">[[${articleVo.fileVo.oriName}]]</a>
+                        <span>[[${articleVo.fileVo.download}]]회 다운로드</span>
                     </td>
                 </tr>
                 <tr>
                     <td>내용</td>
                     <td>
-                        <textarea name="content" readonly>내용</textarea>
+                        <textarea name="content" readonly>[[${articleVo.content}]]</textarea>
                     </td>
                 </tr>
             </table>
             <div>
-                <a th:href="@{#}" class="btnDelete">삭제</a>
-                <a th:href="@{/board/modify(group=${group})}" class="btnModify">수정</a>
-                <a th:href="@{/board/list(group=${group})}" class="btnList">목록</a>
+                <a th:href="@{/board/delete(group=${group},cate=${cate},seq=${articleVo.seq})}" class="btnDelete">삭제</a>
+                <a th:href="@{/board/modify(group=${group},cate=${cate},seq=${articleVo.seq})}" class="btnModify">수정</a>
+                <a th:href="@{/board/list(group=${group},cate=${cate},seq=${articleVo.seq})}" class="btnList">목록</a>
             </div>  
             
             <!-- 댓글리스트 -->
@@ -62,14 +77,14 @@
                
                     <textarea name="content"></textarea>
                     <div>
-                        <a href="@{/board/view}" class="btnCancel">취소</a>
+                        <a href="@{/board/view(group=${group},cate=${cate},seq=${articleVo.seq})}" class="btnCancel">취소</a>
                         <input type="submit" class="btnWrite" value="작성완료"/>
                     </div>
                 </form>
             </section>
 
         </section>
-         <th:block th:include="/_footer.html"></th:block>
     </div>    
+  <th:block th:include="/_footer.html"></th:block>
 </body>
 </html>

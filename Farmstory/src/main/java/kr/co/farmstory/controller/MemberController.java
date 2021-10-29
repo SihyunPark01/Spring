@@ -37,7 +37,7 @@ public class MemberController {
 		MemberVo vo = service.selectMember(uid, pass); //얘는 왜 MemberVo에 담는거야?아 if문에 쓸거니까!
 		
 		if(vo == null) {//회원이 아닐경우
-			return "/member/login?success=100";
+			return "redirect:/member/login?success=100";
 		}else {//회원이 맞으면
 			sess.setAttribute("sessMember", vo);
 			return "redirect:/index";
@@ -47,7 +47,7 @@ public class MemberController {
 	@GetMapping("/member/logout")
 	public String logout(HttpSession sess) {
 		sess.invalidate(); //현재 사용자 정보객체 세션 삭제
-		return "redirect:/member/login?success=102";
+		return "redirect:/member/login?success=101";
 	}
 	
 	

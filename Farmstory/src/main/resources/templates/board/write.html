@@ -13,7 +13,8 @@
         <section id="board" class="write">
             <h3>글쓰기</h3>
             <article>
-                <form th:action="@{/write}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/board/write(group=${group},cate=${cate})}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="uid" th:value="${session.sessMember.uid}"/>
                     <table>
                         <tr>
                             <td>제목</td>
@@ -31,13 +32,13 @@
                         </tr>
                     </table>
                     <div>
-                        <a th:href="@{/board/list(group=${group})}" class="btnCancel">취소</a>
+                        <a th:href="@{/board/list(group=${group},cate=${cate})}" class="btnCancel">취소</a>
                         <input type="submit"  class="btnWrite" value="작성완료">
                     </div>
                 </form>
             </article>
         </section>
-      <th:block th:include="/_footer.html"></th:block>
     </div>
+<th:block th:include="/_footer.html"></th:block>    
 </body>
 </html>
