@@ -4,7 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@MapperScan("kr.co.kmarket.dao")
+@MapperScan(value = {"kr.co.kmarket.dao", "kr.co.kmarket.admin.dao"}) //쿼리문 함수들 수행하기 위한 연동작업
 @SpringBootApplication
 public class KmarketApplication {
 
