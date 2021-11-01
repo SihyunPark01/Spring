@@ -23,6 +23,16 @@
 			`rdate`=NOW();
 	</insert>
 	
+	<insert id="insertComment">
+		INSERT INTO `Jboard_article` SET
+			`cate`=#{cate},
+			`parent`=#{parent},
+			`content`=#{content},
+			`uid`=#{uid},
+			`rdate`=NOW();
+	</insert>
+	
+	
 	<!-- 이건 결국 뷰페이지에서 사용하는 것이기 때문에 -->
 	<resultMap id="articleVoResultMap" type="kr.co.farmstory.vo.ArticleVo">
 		<id		column="seq" 	 property="seq" /> <!-- primary key값이므로 id로 선언 -->
@@ -52,6 +62,20 @@
 	<select id="selectFile" resultType="kr.co.farmstory.vo.FileVo">
 		SELECT * FROM `Jboard_file` WHERE `fseq`=#{fseq};
 	</select>
+
+	<select id="selectComment" resultType="kr.co.farmstory.vo.ArticleVo">
+		SELECT a.*, b.nick FROM `Jboard_article` AS a
+		JOIN `Jboard_member` AS b ON a.uid=b.uid
+		WHERE `seq`=#{seq}
+	</select>
+
+
+	<select id="selectComments" resultType="kr.co.farmstory.vo.ArticleVo">
+		SELECT a.*, b.nick FROM `Jboard_article` AS a
+		JOIN `Jboard_member` AS b ON a.uid=b.uid
+		WHERE `parent`=#{seq}
+		ORDER BY `seq` DESC;
+	</select>
 	
 	
 	<select id="selectArticles" resultType="kr.co.farmstory.vo.ArticleVo">
@@ -76,10 +100,24 @@
 		WHERE
 			`seq`=#{seq};
 	</update>
+
+	<update id="updateComment">
+		UPDATE `Jboard_article`
+		SET
+			`content`=#{content}
+		WHERE
+			`seq`=#{seq};
+	</update>
+
 	<delete id="deleteArticle">
 		DELETE FROM `Jboard_article`
 		WHERE `seq`=#{seq};
 	
 	</delete>
+	<delete id="deleteComment">
+		DELETE FROM `Jboard_article`
+		WHERE `seq`=#{seq};
 	
+	</delete>
+
 </mapper>

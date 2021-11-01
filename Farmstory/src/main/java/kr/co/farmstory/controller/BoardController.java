@@ -10,6 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import kr.co.farmstory.service.BoardService;
 import kr.co.farmstory.vo.ArticleVo;
@@ -82,6 +86,7 @@ public class BoardController {
 		return "redirect:/board/list?group="+group+"&cate="+cate;
 	}
 	
+	
 	@GetMapping("/board/view")
 	public String view(HttpSession sess, Model model, String group, String cate, int seq) {
 		
@@ -90,14 +95,18 @@ public class BoardController {
 		model.addAttribute("group", group);
 		model.addAttribute("cate", cate);
 		
+		ArticleVo vo = service.selectArticle(seq);
+		List<ArticleVo> comments = service.selectComments(seq);
+		
+		model.addAttribute(vo);
+		model.addAttribute("comments",comments);
+		
 		if(mvo == null) {
 			return "redirect:/member/login?success=102";
 		}else {
-			ArticleVo vo = (ArticleVo) service.selectArticle(seq);
-			model.addAttribute(vo);
 			return "/board/view";
 		}
-		
+	
 	}
 	
 	@GetMapping("/board/modify")
@@ -138,6 +147,42 @@ public class BoardController {
 		model.addAttribute("group", group);
 		model.addAttribute("cate", cate);
 		return "redirect:/board/list?group="+group+"&cate="+cate;
+	}
+	
+	@PostMapping("/board/insertComment")
+	public String insertComment(Model model, String group, String cate, ArticleVo vo) {
+		
+		service.insertComment(vo);
+		
+		model.addAttribute("group", group);
+		model.addAttribute("cate", cate);
+		return "redirect:/board/view?group="+group+"&cate="+cate+"&seq="+vo.getParent();
+	}
+	
+	@GetMapping("/board/deleteComment")
+	public String deleteComment(Model model, String group, String cate, int seq, int parent) {
+		service.deleteComment(seq);
+		model.addAttribute("group", group);
+		model.addAttribute("cate", cate);
+		return "redirect:/board/view?group="+group+"&cate="+cate+"&seq="+parent;
+	}
+
+	
+	@PostMapping("/board/updateComment")
+	public String updateComment(HttpServletRequest req, ArticleVo vo, Model model, String content, String group, String cate) {
+		
+		 int seq = vo.getSeq();
+		 int parent = vo.getParent();
+
+		 service.updateComment(seq, content);
+		 
+		model.addAttribute("group", group);
+		model.addAttribute("cate", cate);
+		model.addAttribute("content", content);
+		
+		return "redirect:/board/view?group="+group+"&cate="+cate+"&seq="+parent;
+		//return "/member/register"
+		
 	}
 	
 }
