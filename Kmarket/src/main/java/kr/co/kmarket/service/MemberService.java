@@ -18,6 +18,11 @@ public class MemberService {
 		dao.insertMember(vo);
 		
 	};
+	
+	public MemberVo selectMember(String uid, String pass) {
+		return dao.selectMember(uid, pass);
+	};
+	
 	public MemberTermsVo selectTerms() {
 		return dao.selectTerms();
 		

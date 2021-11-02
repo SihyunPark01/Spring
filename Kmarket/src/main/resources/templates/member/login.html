@@ -12,7 +12,7 @@
         <main>
             <div id="member-login">
                 <img src="../img/member_txt_login.gif" alt="로그인" />
-				<form action="#">
+				<form th:action="@{/member/login}" method="post">     <!-- 컨트롤러주소값으로 넘겨주는 놈이니까 -->
 					<div>
 						<label>
 							<span><img src="../img/member_txt_id.gif" alt="아이디"></span> 
@@ -27,7 +27,7 @@
 					<span>
 						<a href="#">아이디찾기</a>
 						<a href="#">비밀번호찾기</a>
-						<a href="#">회원가입</a>
+						<a th:href="@{/member/join}">회원가입</a>
 					</span>
 				</form>
 				<img src="../img/member_certifi_logo.gif" alt="banner">

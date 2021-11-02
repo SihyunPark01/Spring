@@ -38,7 +38,9 @@
 		SELECT * FROM `km_member_terms`;
 	</select>
 	
-	
+	<select id="selectMember" resultType="kr.co.kmarket.vo.MemberVo">
+		SELECT * FROM `km_member` WHERE `uid`=#{uid} AND `pass`=PASSWORD(#{pass});
+	</select>
 	
 	
 </mapper>

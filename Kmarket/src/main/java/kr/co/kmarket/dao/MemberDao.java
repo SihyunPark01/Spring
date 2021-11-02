@@ -8,7 +8,8 @@ import kr.co.kmarket.vo.MemberVo;
 @Repository
 public interface MemberDao {
 
-	public void insertMember(MemberVo vo);
+	public MemberVo insertMember(MemberVo vo);
+	public MemberVo selectMember(String uid, String pass);
 	public MemberTermsVo selectTerms();
 	
 }
