@@ -9,8 +9,9 @@
                     <a th:href="@{/product/cart}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
                 </th:block>    
 				<th:block th:if="${session.sessMember} != null">  
+					<a th:if="${session.sessMember.type == 2}" th:href="@{/admin}">관리자</a>            
 					<a href="#">마이페이지</a>            
-                    <a th:href="@{/member/login}">로그아웃</a>
+                    <a th:href="@{/member/logout}">로그아웃</a>   <!-- 뷰페이지에서의 링크는 항상 컨트롤러에 명시한 링크를 생각해야함!!! -->
                     <a th:href="@{/product/cart}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
                 </th:block>    
                 </div>

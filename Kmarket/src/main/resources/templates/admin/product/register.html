@@ -10,6 +10,75 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+    <script>
+		
+    $(function(){
+	
+    		var select1 = $('select[name=category1]');
+    		var select2 = $('select[name=category2]');
+    	
+    	
+			//1차 상품 카테고리 생성
+			
+			 $.get('/admin/product/getCate1', function(data){
+				 
+				 /* 한번 확인해봐
+					select1.append("<option>2</option>"); 
+					select1.append("<option>3</option>"); 
+					select1.append("<option>4</option>"); 
+					select1.append("<option>5</option>"); 
+					*/
+				 
+				 /* 이 구문을 제이쿼리함수 each로 바꿔보자
+				 for(var i=0 ; i<data.length ; i++){
+					 select1.append("<option value='"+data[i].cate1+"'>"+data[i].title+"</option>");
+				 }*/
+				
+				$.each(data, function(i, vo){
+					 select1.append("<option value='"+vo.cate1+"'>"+vo.title+"</option>");
+				});
+				
+			 });
+			
+			/*
+			$.ajax({
+				url: '/admin/product/getCate1',
+				type: 'get', //클라이언트가 서버에 요청하는 방식 get(주세요) 또는 post(해주세요) delete update put ...
+				dataType: 'json', //서버로부터 받아오는 데이터의 형식, 이게 밑의 data로 들어간다
+				success: function(data){
+					alert(data);
+				}
+			}); */
+			
+			
+			//1차 카테고리 선택해야 2차 카테고리가 생성되도록
+			select1.change(function(){
+				
+				var cate1 = $(this).val(); //select1(this)의 선택된 값(val())!
+				//var jsonData = {'cate1':cate1}; //2가지 방식이 있음 url에 파라미터 실어줘도 되고 아님 jsonData로 실어줘도 됨 
+				
+				
+				//$.ajx()와 같은거 알지?
+				$.get('/admin/product/getCate2?cate1='+cate1, /*jsonData,*/ function(data){
+				
+					//이게 어떤 작업인지 알지? 다음꺼 실행하면 계속 추가로 선택사항들이 나오니까 해당 카테고리에 관련된 2차 카테고리만 나올수있도록 clear시켜줌
+					select2.empty();
+					select2.append("<option value='0'>2차 분류 선택</option>");
+					
+					
+					$.each(data, function(i, vo){
+						 select2.append("<option value='"+vo.cate2+"'>"+vo.title+"</option>");
+					});
+				});
+			});		
+		});    
+    	
+    
+    
+    
+    </script>
+    
+    
 </head>
 <body>
     <div id="admin-wrapper">
@@ -38,11 +107,13 @@
                                     <td>1차 분류</td>
                                     <td>
                                         <select name="category1">
-                                            <option value="cate0">1차 분류 선택</option>
+                                            <option value="0">1차 분류 선택</option>
+                                            <!--  
                                             <option value="cate11">패션·의류·뷰티</option>
                                             <option value="cate12">가전·디지털</option>
                                             <option value="cate13">식품·생필품</option>
-                                            <option value="cate14">홈·문구·취미</option>                                                
+                                            <option value="cate14">홈·문구·취미</option> -->    
+                                                                                       
                                         </select>
                                     </td>
                                 </tr>
@@ -50,11 +121,13 @@
                                     <td>2차 분류</td>
                                     <td>
                                         <select name="category2">
-                                            <option value="cate0">2차 분류 선택</option>
+                                            <option value="0">2차 분류 선택</option>
+                                            <!-- 
                                             <option value="cate21">남성의류</option>
                                             <option value="cate22">여성의류</option>
                                             <option value="cate23">잡화</option>
-                                            <option value="cate24">뷰티</option>                                                
+                                            <option value="cate24">뷰티</option>      -->      
+                                                                                 
                                         </select>
                                     </td>
                                 </tr>
