@@ -4,5 +4,30 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.kmarket.dao.MainDao">
 	
+	<resultMap id="categoriesMap" type="kr.co.kmarket.vo.CategoriesVo"> 
+		<result property="cate1" column="cate1"/> <!-- CategoriesVo에 있는 cate1 -->
+		<result property="tit1" column="tit1"/><!-- CategoriesVo에 있는 tit1 -->
+		
+		<collection property="cate2List" ofType="kr.co.kmarket.vo.ProductCate2Vo"> <!-- CategoriesVo에 있는 cate2List -->
+			<result property="cate1" column="cate1"/>  <!-- ProductCate2Vo에 있는 cate1, column은 db의 컬럼명이겠지... -->
+			<result property="cate2" column="cate2"/>	<!-- ProductCate2Vo에 있는 cate2, column은 db의 컬럼명이겠지... -->
+			<result property="title" column="tit2"/>	<!-- ProductCate2Vo에 있는 title, column은 db의 컬럼명이겠지... -->
+		
+		</collection>
+	
+	</resultMap>
+	
+	<select id="selectCategories" resultMap="categoriesMap"> <!-- 개발자가 select문결과를 resultMap이라는 구조체로 만드는 작업-->
+		SELECT 
+			c2.cate1,
+			c2.cate2,
+			c1.title AS tit1,
+			c2.title AS tit2
+		FROM `km_product_cate1` AS c1
+		JOIN `km_product_cate2` AS c2
+		ON c1.cate1 = c2.cate1
+		ORDER BY c2.cate1, c2.cate2;
+		<!-- 디코캡쳐의 쿼리문 결과 확인하기 -->
+	</select>
 	
 </mapper>
