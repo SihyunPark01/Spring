@@ -11,20 +11,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" th:href="@{/css/style.css}"/>    
-    <style>    
-
-        
-
-    </style>
+    <style></style>
+    
 </head>
 <body>
     <div id="wrapper">
       <th:block th:include="./_header.html"></th:block>
 
         <main>
+        	<aside>
             <!-- 카테고리/베스트 상품 영역 -->
-           <th:block th:include="./product/_aside.html"></th:block>
-            
+           <th:block th:include="@{/_category.html}"></th:block>
+            </aside>
 
             <!-- 상품목록 -->
             <section id="list">

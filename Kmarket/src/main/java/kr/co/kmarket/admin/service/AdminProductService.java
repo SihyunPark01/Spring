@@ -45,10 +45,10 @@ public class AdminProductService {
 	//파일 업로드 처리
 	public ProductVo fileUpload(ProductVo vo) {
 	//파일 객체 생성 3줄은 자동화시켜라
-	File file = new File("src/main/resources/static/thumb/");
-	String path = file.getAbsolutePath();
+	File file = new File("src/main/resources/static/thumb/"); //이때 thumb 폴더 만들어주기
+	String path = file.getAbsolutePath(); //경로위치탐색함수 
 	
-	//총 썸네일파일 4개니까
+	//총 썸네일 파일 4개니까
 	MultipartFile[] files = {vo.getThumbFile1(),
 							vo.getThumbFile2(),
 							vo.getThumbFile3(),
@@ -56,7 +56,7 @@ public class AdminProductService {
 	
 	int i = 0;
 	
-	//썸네일파일 1개만 추가할수도있고 4개 다할수도 있으니
+	//썸네일 파일 1개만 추가할수도있고 4개 다할수도 있으니
 	for(MultipartFile mf : files) {
 		
 		if(!mf.isEmpty()) { //썸네일파일을 첨부했으면

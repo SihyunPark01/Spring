@@ -28,6 +28,10 @@ public class ProductController {
 	}
 	@GetMapping("/product/view")
 	public String view() {
+		
+		
+		
+		
 		return "/product/view";
 	}
 }

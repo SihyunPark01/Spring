@@ -30,4 +30,28 @@
 		<!-- 디코캡쳐의 쿼리문 결과 확인하기 -->
 	</select>
 	
+	<select id="selectMainProduct" resultType="kr.co.kmarket.vo.ProductVo">
+		<!-- SELECT * FROM `km_product` ORDER BY `hit` DESC LIMIT 8; -->
+		SELECT *, ROUND((price * (1 - discount/100)), -2) AS `salePrice` FROM `km_product` 
+		<if test="order == 'hit'">ORDER BY `hit` DESC LIMIT 8;</if> <!-- 히트상품 -->
+		<if test="order == 'score'">ORDER BY `score` DESC LIMIT 8;</if> <!-- 추천상품 -->
+		<if test="order == 'rdate'">ORDER BY `rdate` DESC LIMIT 8;</if> <!-- 최신상품 -->
+		<if test="order == 'discount'">ORDER BY `discount` DESC LIMIT 8;</if> <!-- 할인상품 -->
+		<if test="order == 'sold'">ORDER BY `sold` DESC LIMIT 5;</if> <!-- 베스트상품 -->
+		
+	</select>
+	
+	<!-- 계속 반복될거니까 위의 문법처럼 선언 
+	<select id="selectRecommend" resultType="kr.co.kmarket.vo.ProductVo">
+		SELECT *, ROUND((price * (1 - discount/100)), -2) AS `salePrice` FROM `km_product` 
+		ORDER BY `score` DESC
+		LIMIT 8;
+	</select>
+	 -->
+	
+	
+	
+	
+	
+	
 </mapper>

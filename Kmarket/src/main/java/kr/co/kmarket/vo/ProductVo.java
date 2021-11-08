@@ -42,9 +42,15 @@ public class ProductVo {
 	private String etc4;
 	private String etc5;
 	
-	//추가필드
-	private MultipartFile thumbFile1;
+	//추가필드 1
+	private int salePrice;
+	
+	//추가필드 2
+	private MultipartFile thumbFile1; //파일업로드를 위한 인터페이스 MultipartFile !
 	private MultipartFile thumbFile2;
 	private MultipartFile thumbFile3;
 	private MultipartFile detailFile4;
+	
+	
+	
 }
