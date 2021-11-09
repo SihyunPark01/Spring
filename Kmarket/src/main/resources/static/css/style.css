@@ -534,11 +534,11 @@ h6.rating {
     background-position: 36px 0px;
     background-size: auto 100%;
 }
-h6.rating.star1 {width: 50px;}
-h6.rating.star3 {width: 78px;}
-h6.rating.star2 {width: 64px;}
-h6.rating.star4 {width: 91px;}
-h6.rating.star5 {width: 106px;}
+h6.rating.star1 {width: 55px;}
+h6.rating.star3 {width: 70px;}
+h6.rating.star2 {width: 85px;}
+h6.rating.star4 {width: 100px;}
+h6.rating.star5 {width: 120px;}
 
 h5.rating {
     width: 150px;

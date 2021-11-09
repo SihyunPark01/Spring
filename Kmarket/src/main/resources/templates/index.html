@@ -12,31 +12,168 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <script>
+    
+    	// 슬라이더
         $(document).ready(function(){
           $('.slider > ul').bxSlider({
               pager: false,
               easing: 'linear'
           });
         });
-      
-      $(function(){
+    	
+    	// 베스트상품 영역 고정 스크립트
+	      $(function(){
+	        var best = $('aside > .best');
+	        $(window).scroll(function(){
+	          var t = $(this).scrollTop();
+	          if(t > 620){
+	            best.css({
+	              'position':'fixed',
+	              'top': '0'
+	            });
+	          }else{
+	            best.css({'position':'static'});
+	          }
+	        });
+	      });
+    	
+    	// 추천, 최신, 할인 상품 요청하기
+    	$(function(){
+    		
+    		
+    		//상태변수 잡아주기
+    		var isRecommendOk = false;
+    		var isLatestOk = false;
+    		var isDiscountOk = false;
+    		
+    		//문서객체 생성
+    		var sectionHit  	 = $('section.hit');
+    		var sectionRecommend = $('section.recommend');
+    		var sectionNew 		 = $('section.new');
+    		var sectionDiscount  = $('section.discount');
+    		
+    		//스크롤바를 내릴때(position이 0보다 클때) 요청
+    		$(window).scroll(function(){
+    			//확인작업 console.log('scroll~~~!!!!!');
+    			
+    			var top = $(this).scrollTop();
+    			console.log('top : '+top);
+    			
+    			if(top > 0 && !isRecommendOk){ //스크롤바를 내리면 && isRecommendOk가 true면
+    				//추천상품 요청하기
+    				// loading 이미지 제거
+   					sectionRecommend.find('img[alt=loading]').remove(); //img태그 찾아서 사라지게 하고 article태그 들어올거니까 
+    				
+    				var url = '/getMainProduct?order=score'
+    				$.get(url, function(data){
+    					//alert(data); //스크롤바한번내리면 바로 뜨는거 봤지
+    					
+    					// article 상품정보 출력
+    					$.each(data, function(i, productVo){
+    						
+    						var article = sectionHit.find('article:last-child').clone(); // var article은 히트상품의 마지막 상품을 가리킴
+    						article.find('> a').attr('href','/product/view');
+    						article.find('.thumb > img').attr('src', '/thumb/'+productVo.cate1+'/'+productVo.cate2+'/'+productVo.thumb1);
+    						article.find('h2').text(productVo.name);
+    						article.find('p').text(productVo.descript);
+    						article.find('.org_price > del').text(productVo.price.toLocaleString());
+    						article.find('.org_price > span').text(productVo.discount+'%');
+    						article.find('.dis_price > ins').text(productVo.salePrice.toLocaleString());
+    						article.find('.dis_price > span').remove();
+    						article.find('.dis_price > strong').remove();
 
-        var best = $('aside > .best');
+    						if(productVo.delivery > 0){
+    							article.find('.dis_price').append('<strong>배송비' + productVo.delivery.toLocaleString()+'</strong>');
+    						}else{
+    							article.find('.dis_price').append('<span>무료배송</span>');
+    						}
+    						
+    						sectionRecommend.append(article);
+    						
+    					});
+    				});
+    			
+    				isRecommendOk = true;
+    			
+    			}else if(top > 1000 && !isLatestOk ){
+    				//최신상품 요청하기
+    				
+    				// loading 이미지 제거
+   					sectionNew.find('img[alt=loading]').remove(); //img태그 찾아서 사라지게 하고 article태그 들어올거니까 
+    				
+    				var url = '/getMainProduct?order=rdate'
+    				$.get(url, function(data){
+    					//alert(data); //스크롤바한번내리면 바로 뜨는거 봤지
+    					
+    					// article 상품정보 출력
+    					$.each(data, function(i, productVo){
+    						
+    						var article = sectionHit.find('article:last-child').clone(); // var article은 히트상품의 마지막 상품을 가리킴
+    						article.find('> a').attr('href','/product/view');
+    						article.find('.thumb > img').attr('src', '/thumb/'+productVo.cate1+'/'+productVo.cate2+'/'+productVo.thumb1);
+    						article.find('h2').text(productVo.name);
+    						article.find('p').text(productVo.descript);
+    						article.find('.org_price > del').text(productVo.price.toLocaleString());
+    						article.find('.org_price > span').text(productVo.discount+'%');
+    						article.find('.dis_price > ins').text(productVo.salePrice.toLocaleString());
+    						article.find('.dis_price > span').remove();
+    						article.find('.dis_price > strong').remove();
 
-        $(window).scroll(function(){
+    						if(productVo.delivery > 0){
+    							article.find('.dis_price').append('<strong>배송비' + productVo.delivery.toLocaleString()+'</strong>');
+    						}else{
+    							article.find('.dis_price').append('<span>무료배송</span>');
+    						}
+    						
+    						sectionNew.append(article);
+    						
+    					});
+    				});
+    			
+    				isLatestOk = true;
+    				
+    			}else if(top > 1500 && !isDiscountOk ){
+					//할인상품 요청하기
+					
+    				// loading 이미지 제거
+   					sectionDiscount.find('img[alt=loading]').remove(); //img태그 찾아서 사라지게 하고 article태그 들어올거니까 
+    				
+    				var url = '/getMainProduct?order=discount'
+    				$.get(url, function(data){
+    					//alert(data); //스크롤바한번내리면 바로 뜨는거 봤지
+    					
+    					// article 상품정보 출력
+    					$.each(data, function(i, productVo){
+    						
+    						var article = sectionHit.find('article:last-child').clone(); // var article은 히트상품의 마지막 상품을 가리킴
+    						article.find('> a').attr('href','/product/view');
+    						article.find('.thumb > img').attr('src', '/thumb/'+productVo.cate1+'/'+productVo.cate2+'/'+productVo.thumb1);
+    						article.find('h2').text(productVo.name);
+    						article.find('p').text(productVo.descript);
+    						article.find('.org_price > del').text(productVo.price.toLocaleString());
+    						article.find('.org_price > span').text(productVo.discount+'%');
+    						article.find('.dis_price > ins').text(productVo.salePrice.toLocaleString());
+    						article.find('.dis_price > span').remove();
+    						article.find('.dis_price > strong').remove();
 
-          var t = $(this).scrollTop();
-
-          if(t > 620){
-            best.css({
-              'position':'fixed',
-              'top': '0'
-            });
-          }else{
-            best.css({'position':'static'});
-          }
-        });
-      });
+    						if(productVo.delivery > 0){
+    							article.find('.dis_price').append('<strong>배송비' + productVo.delivery.toLocaleString()+'</strong>');
+    						}else{
+    							article.find('.dis_price').append('<span>무료배송</span>');
+    						}
+    						
+    						sectionDiscount.append(article);
+    						
+    					});
+    				});
+    			
+    				isDiscountOk = true;
+					
+    			}
+    			
+    		});
+    	});
+    	
     </script>
 </head>
 <body>
@@ -89,28 +226,27 @@
                             </div>
                         </a>
                     </article>
-                    
                 </section>
-                
+
                 
                 <!-- 추천상품 영역 -->
                 <section class="recommend">
                     <h3><span>추천상품</span></h3>
-                    <img th:src="@{/img/loading.gif}" style="display: block; margin:0 auto;" alt="loading" />
-                </section>
+					<img th:src="@{/img/loading.gif}" style="display: block; margin: 0 auto;" alt="loading" />
+				</section>
                 
                 
                 <!-- 최신상품 영역 -->
                 <section class="new">
                     <h3><span>최신상품</span></h3>
-               		<img th:src="@{/img/loading.gif}" style="display: block; margin:0 auto;" alt="loading" />
+               		<img th:src="@{/img/loading.gif}" style="display: block; margin: 0 auto;" alt="loading" />
                 </section>
                 
                 
                 <!-- 할인상품 영역 -->
                 <section class="discount">
                    <h3><span>할인상품</span></h3>
-                   <img th:src="@{/img/loading.gif}" style="display: block; margin:0 auto;" alt="loading" />
+                   <img th:src="@{/img/loading.gif}" style="display: block; margin: 0 auto;" alt="loading" />
                 </section>
                 
             </section>

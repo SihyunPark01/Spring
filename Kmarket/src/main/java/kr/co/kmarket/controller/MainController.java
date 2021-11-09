@@ -51,4 +51,12 @@ public class MainController {
 		
 	}
 	
+	//ajax 추천상품 요청하기 (index)
+	@ResponseBody
+	@GetMapping("/getMainProduct")
+	public List<ProductVo> getMainProduct(String order) {
+		List<ProductVo> products = service.selectMainProduct(order);
+		return products;
+	}
+	
 }

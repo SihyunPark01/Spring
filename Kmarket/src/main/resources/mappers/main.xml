@@ -38,7 +38,6 @@
 		<if test="order == 'rdate'">ORDER BY `rdate` DESC LIMIT 8;</if> <!-- 최신상품 -->
 		<if test="order == 'discount'">ORDER BY `discount` DESC LIMIT 8;</if> <!-- 할인상품 -->
 		<if test="order == 'sold'">ORDER BY `sold` DESC LIMIT 5;</if> <!-- 베스트상품 -->
-		
 	</select>
 	
 	<!-- 계속 반복될거니까 위의 문법처럼 선언 
