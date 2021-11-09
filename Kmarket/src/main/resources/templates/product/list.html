@@ -29,9 +29,13 @@
               
               <!-- 제목, 페이지 네비게이션 -->
               <nav>
-                <h1>여성의류 상품리스트</h1>
+              
+              <!-- 카테이름 테이블 조인해야겠네.. km_product_cate2와 km_product를...-->
+              
+              
+                <h1>[[${cateVo.tit2}]] 상품리스트</h1>
                 <p>
-                  HOME > <span>[[${productVo.cate1}]]</span> > <strong>[[${productVo.cate2}]]</strong>
+                  HOME > <span>[[${cateVo.tit1}]]</span> > <strong>[[${cateVo.tit2}]]</strong>
                 </p>
               </nav>
 
@@ -48,36 +52,36 @@
               <!-- 상품목록 10개 -->
               <section>
               
-                <article th:each="pList : ${products}" >
+                <article th:each="product : ${products}" >
                   <ul>
                     <li>
-                      <a th:href="@{product/view}" class="thumb"> <img th:src="@{/thumb/{cate1}/{cate2}/{img}(cate1=${pList.cate1},cate2=${pList.cate2},img=${pList.thumb1})}" alt="상품이미지"></a>
+                      <a th:href="@{product/view}" class="thumb"> <img th:src="@{/thumb/{cate1}/{cate2}/{img}(cate1=${product.cate1},cate2=${product.cate2},img=${product.thumb1})}" alt="상품이미지"></a>
                     </li>
                     <li>
-                      <h3 class="name">[[${pList.name}]]</h3>
+                      <h3 class="name">[[${product.name}]]</h3>
                       <p class="desc">
-                        <a href="#">[[${pList.descript}]]</a>
+                        <a href="#">[[${product.descript}]]</a>
                       </p>
                     </li>
                     <li>
                       <div class="dis_price">
-                      	<ins>[[${#numbers.formatInteger(pList.price, 3, 'COMMA')}]]</ins>
+                      	<ins>[[${#numbers.formatInteger(product.salePrice, 3, 'COMMA')}]]</ins>
                       </div>
                       <div class="org_price">
-                      	<del>[[${#numbers.formatInteger(pList.price, 3, 'COMMA')}]]</del>
-                      	<span>[[${pList.discount}]]%</span>
+                      	<del>[[${#numbers.formatInteger(product.price, 3, 'COMMA')}]]</del>
+                      	<span>[[${product.discount}]]%</span>
                       </div>
-                      	<span th:if="${pList.delivery == 0}">무료배송</span>
-                      	<strong th:if="${pList.delivery != 0}">배송비 [[${#numbers.formatInteger(pList.delivery, 3, 'COMMA')}]]</strong>
+                      	<span th:if="${product.delivery == 0}">무료배송</span>
+                      	<strong th:if="${product.delivery != 0}">배송비 [[${#numbers.formatInteger(product.delivery, 3, 'COMMA')}]]</strong>
                     </li>
                     <li>
-                      <h4 class="seller"><i class="fas fa-home"></i>&nbsp;[[${pList.seller}]]</h4>
+                      <h4 class="seller"><i class="fas fa-home"></i>&nbsp;[[${product.company}]]</h4>
                       <h5 class="badge power">파워딜러</h5>
-                      <h6 th:if="${pList.score == 1}" class="rating star1">상품평</h6>
-                      <h6 th:if="${pList.score == 2}" class="rating star2">상품평</h6>
-                      <h6 th:if="${pList.score == 3}" class="rating star3">상품평</h6>
-                      <h6 th:if="${pList.score == 4}" class="rating star4">상품평</h6>
-                      <h6 th:if="${pList.score == 5}" class="rating star5">상품평</h6>
+                      <h6 th:if="${product.score == 1}" class="rating star1">상품평</h6>
+                      <h6 th:if="${product.score == 2}" class="rating star2">상품평</h6>
+                      <h6 th:if="${product.score == 3}" class="rating star3">상품평</h6>
+                      <h6 th:if="${product.score == 4}" class="rating star4">상품평</h6>
+                      <h6 th:if="${product.score == 5}" class="rating star5">상품평</h6>
                     </li>
                   </ul>
                 </article>
