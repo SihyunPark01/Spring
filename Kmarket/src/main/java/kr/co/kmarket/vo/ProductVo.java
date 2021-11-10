@@ -46,6 +46,10 @@ public class ProductVo {
 	private int salePrice;
 	private String tit1;
 	private String tit2;
+	private int order = 1; //order의 기본값은 int라 0이므로 1로 초기화하는 작업이 필요함. 
+	
+	// 페이지 처리 관련 추가필드
+	private int start;
 	
 	//추가필드 2
 	private MultipartFile thumbFile1; //파일업로드를 위한 인터페이스 MultipartFile !

@@ -25,37 +25,44 @@
             <!-- 상품 상세페이지 -->
             <section id="view">                
                 <nav>
-                    <h1>[블루포스] FreeMovement BLUEFORCE</h1>
+                    <h1>[[${product.name}]]</h1>
                     <p>
-                        HOME > <span>패션·의류·뷰티</span> > <strong>남성의류</strong>
+                        HOME > <span>[[${product.tit1}]]</span> > <strong>[[${product.tit2}]]</strong> <!-- 조인 필요... -->
                     </p>
                 </nav>
                 <section>
                     <article class="info">
                         <div class="image">
-                            <img src="../img/thumb-sample-t1.jpg" alt="상품이미지"/>
+                            <img th:src="@{/thumb/{cate1}/{cate2}/{img}(cate1=${product.cate1},cate2=${product.cate2},img=${product.thumb2})}" alt="상품이미지">
                         </div>
                         <div class="summary">
                             <nav>
-                                <h1>(주)블루포스</h1>
-                                <h2>상품번호&nbsp;:&nbsp;<span>10010118412</span></h2>
+                                <h1>[[${product.company}]]</h1>
+                                <h2>상품번호&nbsp;:&nbsp;<span>[[${product.productCode}]]</span></h2>
                             </nav>
-                            <p>남자 셔츠 남방 남성 와이셔츠 체크남방 스트라이프</p>
+                            <p>[[${product.descript}]]</p>
                             <nav>
-                                <h5 class="rating star4"><a href="#">상품평보기</a></h5>
+                                <h6 th:if="${product.score == 1}" class="rating star1"><a href="#">상품평보기</a></h6>
+			                    <h6 th:if="${product.score == 2}" class="rating star2"><a href="#">상품평보기</a></h6>
+			                    <h6 th:if="${product.score == 3}" class="rating star3"><a href="#">상품평보기</a></h6>
+			                    <h6 th:if="${product.score == 4}" class="rating star4"><a href="#">상품평보기</a></h6>
+			                    <h6 th:if="${product.score == 5}" class="rating star5"><a href="#">상품평보기</a></h6>
                             </nav>
                             <nav>
                                 <div class="org_price">
-                                    <del>30,000</del>
-                                    <span>10%</span>
+                                    <del>[[${#numbers.formatInteger(product.price, 3, 'COMMA')}]]</del>
+                                    <span>[[${product.discount}]]%</span>
                                 </div>
                                 <div class="dis_price">
-                                    <ins>27,000</ins>
+                                    <ins>[[${#numbers.formatInteger(product.salePrice, 3, 'COMMA')}]]</ins>
                                 </div>
                             </nav>
                             <nav>
-                                <span class="delivery">무료배송</span>
-                                <span class="arrival">모레(금) 7/8 도착예정</span>
+                                <span class="delivery">	
+	                                <span th:if="${product.delivery == 0}" class="delivery">무료배송</span>
+			                      	<strong th:if="${product.delivery != 0}" class="delivery">배송비 [[${#numbers.formatInteger(product.delivery, 3, 'COMMA')}]]</strong>
+	          					</span>
+                                <span class="arrival"></span>
                                 <span class="desc">본 상품은 국내배송만 가능합니다.</span>
                             </nav>
                             <nav>
@@ -66,8 +73,17 @@
                                 <span class="origin">원산지-상세설명 참조</span>
                             </nav>
                             <img src="../img/vip_plcc_banner.png" alt="100원만 결제해도 1만원 적립!" class="banner" />
+                            
+                                                      
+                            
+                            <div class="count">
+                            	<button class="decrease">-</button>
+                            	<input type="type" name="num" value="1"/>
+                            	<button class="increase">+</button>
+                            </div>
+                            
                             <div class="total">
-                                <span>35,000</span>
+                                <span>[[${#numbers.formatInteger(product.salePrice, 3, 'COMMA')}]]</span>
                                 <em>총 상품금액</em>
                             </div>
 
@@ -78,13 +94,15 @@
 
                         </div>
                     </article>
+                    
+                    
                     <article class="detail">
                         <nav>
                             <h1>상품정보</h1>
                         </nav>
                         <!-- 상품상세페이지 이미지 -->
-                        <img src="../img/sample_detail1.jpg" alt="">
-                        <img src="../img/sample_detail2.jpg" alt="">
+                        <img th:src="@{/thumb/{cate1}/{cate2}/{img}(cate1=${product.cate1}, cate2=${product.cate2}, img=${product.detail})}" alt="">
+                        <img th:src="@{/thumb/{cate1}/{cate2}/{img}(cate1=${product.cate1}, cate2=${product.cate2}, img=${product.detail})}" alt="">
                     </article>
 
                     <article class="notice">
@@ -94,32 +112,32 @@
                         </nav>
                         <table border="0">
                             <tr>
-                                <td>상품번호</td>
-                                <td>10110125435</td>
+                                <td>상품정보</td>
+                                <td>[[${product.productCode}]]</td>
                             </tr>
                             <tr>
                                 <td>상품상태</td>
-                                <td>새상품</td>
+                                <td>[[${product.status}]]</td>
                             </tr>
                             <tr>
                                 <td>부가세 면세여부</td>
-                                <td>과세상품</td>
+                                <td>[[${product.dutyFree}]]</td>
                             </tr>
                             <tr>
                                 <td>영수증발행</td>
-                                <td>발행가능 - 신용카드 전표, 온라인 현금영수증</td>
+                                <td>[[${product.receipt}]]</td>
                             </tr>
                             <tr>
                                 <td>사업자구분</td>
-                                <td>사업자 판매자</td>
+                                <td>[[${product.bizClass}]]</td>
                             </tr>
                             <tr>
                                 <td>브랜드</td>
-                                <td>블루포스</td>
+                                <td>[[${product.company}]]</td>
                             </tr>
                             <tr>
                                 <td>원산지</td>
-                                <td>국내생산</td>
+                                <td>[[${product.origin}]]</td>
                             </tr>
                         </table>
                         <table border="0">
