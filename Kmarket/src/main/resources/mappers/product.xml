@@ -41,7 +41,7 @@
 	</insert>
 	 -->
 	 
-	 
+	
 	<select id="selectProduct" resultType="kr.co.kmarket.vo.ProductVo">
 		SELECT 
 			a.*, 

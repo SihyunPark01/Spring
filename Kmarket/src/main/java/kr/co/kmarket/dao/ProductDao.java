@@ -12,6 +12,9 @@ import kr.co.kmarket.vo.SearchVo;
 public interface ProductDao {
 	
 	public void insertProduct();
+	
+	public void insertCart();
+	
 	public ProductVo selectProduct(int productCode);
 	public List<ProductVo> selectProducts(ProductVo vo);
 	public CategoriesVo selectCategoryTitle(ProductVo vo);

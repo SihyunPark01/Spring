@@ -11,6 +11,104 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script th:inline="javascript"> 
+    
+    	$(function(){
+    		
+    			var sessMember = [[${session.sessMember}]];
+    			var productVo = [[${product}]];
+    			//var salePrice = "[[${product.salePrice}]]";
+    			var btnIncrease = $('#view .count > .increase');
+    			var btnDecrease = $('#view .count > .decrease');
+    			var inputNum = $('#view .count > input[name=num]');
+    			var total = 0;
+    			
+    			
+    			btnIncrease.click(function(){
+					var num = parseInt(inputNum.val());
+					num++; //자바스크립트에서는 증감연산자 가능
+					inputNum.val(num);
+					
+					// 전체 합 계산 (salePrice필요하므로 위에 변수선언)
+					total = productVo.salePrice * num;			
+					$('#view .total > span').text(total.toLocaleString());
+    			});
+    			
+    			
+    			btnDecrease.click(function(){
+    				var num = parseInt(inputNum.val());
+					num--;
+					
+					if(num < 1){
+						//alert('최소 수량은 1개입니다.')
+						return;	
+					}
+					inputNum.val(num);
+					
+					// 전체 합 계산 (salePrice필요하므로 위에 변수선언)
+					total = productVo.salePrice * num;			
+					$('#view .total > span').text(total.toLocaleString());
+					
+    			});
+    			
+    			
+    			//장바구니 클릭
+    			$('#view .button > .cart').click(function(){
+    				
+    				//alert('로긴!!!!!')
+    				
+    				//로그인 여부 확인
+    				
+    				//var sessMember = [[${session.sessMember}]];
+    				
+    				//alert('로그인!!!')
+    				
+    				if(sessMember == null){//로그인 안했으면
+    					
+    					alert('로그인을 하셔야 합니다.');
+    					//location.href = '/member/login?productCode='+productCode; //로그인페이지로 갔다가 로그인하면 바로 상품페이지로 다시와야하므로
+    				
+    				}else{
+    					alert('로그인을 함');
+    					
+    					//로그인 했으면
+    					var jsonData = {
+							'uid': sessMember.uid,	
+							'productCode': productVo.productCode,	
+							'count': inputNum.val(),	
+							'price': productVo.price,	
+							'discount': productVo.discount,	
+							'point': productVo.point,	
+							'delivery': productVo.delivery,
+							'total': total,
+						};
+    					
+					
+					$.post('/product/cart', jsonData, function(data){
+					});
+    					
+    					/*
+    					$.ajax({
+    						url: '/product/cart',
+    						type: 'post',
+    						data: jsonData,
+    						dataType: 'json',
+    						success: function(data){}
+    					});
+    					*/
+    				}
+    				
+    			});
+    			
+    			
+    			//주문하기 클릭
+    			$('#view .button > .order').click(function(){
+    				alert('로긴!!!!!')	
+    				
+    			});
+    	});
+    </script>
+    
 </head>
 <body>
     <div id="wrapper">
@@ -78,7 +176,7 @@
                             
                             <div class="count">
                             	<button class="decrease">-</button>
-                            	<input type="type" name="num" value="1"/>
+                            	<input type="type" name="num" value="1" readonly />
                             	<button class="increase">+</button>
                             </div>
                             
@@ -88,7 +186,7 @@
                             </div>
 
                             <div class="button">
-                                <input type="button" class="cart"  value="장바구니"/>
+                                <input type="button" class="cart"  value="장바구니"/> <!-- 클릭시 담기기만 하고 alert만 띄우지 페이지 이동이 아니므로 ajax로 처리해야함 -->
                                 <input type="button" class="order" value="구매하기"/>
                             </div>
 

@@ -2,14 +2,18 @@ package kr.co.kmarket.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import kr.co.kmarket.service.ProductCartService;
 import kr.co.kmarket.service.ProductService;
 import kr.co.kmarket.vo.CategoriesVo;
+import kr.co.kmarket.vo.ProductCartVo;
 import kr.co.kmarket.vo.ProductVo;
 import kr.co.kmarket.vo.SearchVo;
 
@@ -18,10 +22,25 @@ public class ProductController {
 
 	@Autowired
 	private ProductService service;
+	@Autowired
+	private ProductCartService cartService;
+	
 	
 	
 	@GetMapping("/product/cart")
 	public String cart() {
+		return "/product/cart";
+	}
+	
+	@PostMapping("/product/cart")
+	public String cart(ProductCartVo vo) {
+		
+		System.out.println("delivery :" + vo.getDelivery());
+		System.out.println("total :" + vo.getTotal());					//8
+		
+		cartService.insertCart(vo);
+		
+		
 		return "/product/cart";
 	}
 
@@ -81,10 +100,9 @@ public class ProductController {
 	
 	
 	@GetMapping("/product/view")
-	public String view(ProductVo vo, Model model) {
+	public String view(int productCode, Model model) {
 		
-		ProductVo product = service.selectProduct(vo.getProductCode());
-		
+		ProductVo product = service.selectProduct(productCode);
 		model.addAttribute("product", product);
 		
 		return "/product/view";
