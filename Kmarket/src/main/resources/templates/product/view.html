@@ -15,29 +15,37 @@
     
     	$(function(){
     		
-    			var sessMember = [[${session.sessMember}]];
-    			var productVo = [[${product}]];
-    			//var salePrice = "[[${product.salePrice}]]";
-    			var btnIncrease = $('#view .count > .increase');
-    			var btnDecrease = $('#view .count > .decrease');
-    			var inputNum = $('#view .count > input[name=num]');
-    			var total = 0;
+				//태그 객체    			
+    			var btnIncrease 	=$('#view .count > .increase');
+    			var btnDecrease 	=$('#view .count > .decrease');
+    			var inputNum 		=$('#view .count > input[name=num]');
+    			
+    			//value값
+    			var uid 			=$('#view > input[name=uid]').val(); //val()없으면 문서객체그자체임...
+    			var salePrice 		=$('#view > input[name=salePrice]').val();
+    			var productCode		=$('#view > input[name=productCode]').val();
+    			var price			=$('#view > input[name=price]').val();
+    			var discount 		=$('#view > input[name=discount]').val();
+    			var point	 		=$('#view > input[name=point]').val();
+    			var delivery 		=$('#view > input[name=delivery]').val();
+    			var count			=1; //이게 뭔데? 밑의 num 연산위한 변수
+    			var total 			=salePrice;
     			
     			
     			btnIncrease.click(function(){
 					var num = parseInt(inputNum.val());
-					num++; //자바스크립트에서는 증감연산자 가능
+					count = ++num; //자바스크립트에서는 증감연산자 가능, ++은 앞에둬야함
 					inputNum.val(num);
 					
 					// 전체 합 계산 (salePrice필요하므로 위에 변수선언)
-					total = productVo.salePrice * num;			
+					total = salePrice * num;			
 					$('#view .total > span').text(total.toLocaleString());
     			});
     			
     			
     			btnDecrease.click(function(){
     				var num = parseInt(inputNum.val());
-					num--;
+					count = --num;
 					
 					if(num < 1){
 						//alert('최소 수량은 1개입니다.')
@@ -46,7 +54,7 @@
 					inputNum.val(num);
 					
 					// 전체 합 계산 (salePrice필요하므로 위에 변수선언)
-					total = productVo.salePrice * num;			
+					total = salePrice * num;			
 					$('#view .total > span').text(total.toLocaleString());
 					
     			});
@@ -55,39 +63,48 @@
     			//장바구니 클릭
     			$('#view .button > .cart').click(function(){
     				
-    				//alert('로긴!!!!!')
-    				
     				//로그인 여부 확인
     				
-    				//var sessMember = [[${session.sessMember}]];
-    				
-    				//alert('로그인!!!')
-    				
-    				if(sessMember == null){//로그인 안했으면
+    				if(uid == null){//로그인 안했으면
     					
-    					alert('로그인을 하셔야 합니다.');
-    					//location.href = '/member/login?productCode='+productCode; //로그인페이지로 갔다가 로그인하면 바로 상품페이지로 다시와야하므로
-    				
+    					var result = confirm('로그인을 하셔야 합니다.'); //확인,취소 버튼이 있는 상자 : confirm
+    					if(result){
+    					location.href = '/member/login?productCode='+productCode; //로그인페이지로 갔다가 로그인하면 바로 상품페이지로 다시와야하므로
+    					}
     				}else{
-    					alert('로그인을 함');
-    					
+    					//alert('로그인을 함');
     					//로그인 했으면
     					var jsonData = {
-							'uid': sessMember.uid,	
-							'productCode': productVo.productCode,	
-							'count': inputNum.val(),	
-							'price': productVo.price,	
-							'discount': productVo.discount,	
-							'point': productVo.point,	
-							'delivery': productVo.delivery,
+							'uid': uid,	
+							'productCode': productCode,	
+							'count': count,	
+							'price': price,	
+							'discount': discount,	
+							'point': point,	
+							'delivery': delivery,
 							'total': total,
 						};
     					
-					
+					//***********************
 					$.post('/product/cart', jsonData, function(data){
-					});
+						
+						if(data.result == 1){
+							var result = confirm('이미 장바구니에 상품이 담겨있습니다. 장바구니로 이동하시겠습니까?');
+							if(result){
+								location.href = '/product/cart';	
+							}
+						}else{
+							var result = confirm('장바구니에 상품을 담았습니다.\n장바구니 페이지로 이동하시겠습니까?');
+							if(result){ //result가 true면, 즉 확인버튼 누르면
+								location.href = '/product/cart';
+							}
+						}
+					}, "json");
+					
+    			}
+			});
     					
-    					/*
+    					/* ajax 기본방식 확인용
     					$.ajax({
     						url: '/product/cart',
     						type: 'post',
@@ -96,9 +113,7 @@
     						success: function(data){}
     					});
     					*/
-    				}
-    				
-    			});
+    			
     			
     			
     			//주문하기 클릭
@@ -121,7 +136,16 @@
             </aside>
 
             <!-- 상품 상세페이지 -->
-            <section id="view">                
+            <section id="view">
+            								<!-- 수정한부분 input hidden으로 추가하여 위의 변수 변경하고...-->     
+            	<input type="hidden" name="uid" 		th:if="${session.sessMember != null}"  th:value="${session.sessMember.uid}"/>
+            	<input type="hidden" name="salePrice" 	th:value="${product.salePrice}"/>
+            	<input type="hidden" name="productCode" th:value="${product.productCode}"/>
+            	<input type="hidden" name="price" 		th:value="${product.price}"/>
+            	<input type="hidden" name="discount" 	th:value="${product.discount}"/>
+            	<input type="hidden" name="point" 		th:value="${product.point}"/>
+            	<input type="hidden" name="delivery" 	th:value="${product.delivery}"/>
+                       
                 <nav>
                     <h1>[[${product.name}]]</h1>
                     <p>
@@ -140,11 +164,11 @@
                             </nav>
                             <p>[[${product.descript}]]</p>
                             <nav>
-                                <h6 th:if="${product.score == 1}" class="rating star1"><a href="#">상품평보기</a></h6>
-			                    <h6 th:if="${product.score == 2}" class="rating star2"><a href="#">상품평보기</a></h6>
-			                    <h6 th:if="${product.score == 3}" class="rating star3"><a href="#">상품평보기</a></h6>
-			                    <h6 th:if="${product.score == 4}" class="rating star4"><a href="#">상품평보기</a></h6>
-			                    <h6 th:if="${product.score == 5}" class="rating star5"><a href="#">상품평보기</a></h6>
+                                <h5 th:if="${product.score == 1}" class="rating star1"><a href="#">상품평보기</a></h5>
+                                <h5 th:if="${product.score == 2}" class="rating star2"><a href="#">상품평보기</a></h5>
+                                <h5 th:if="${product.score == 3}" class="rating star3"><a href="#">상품평보기</a></h5>
+                                <h5 th:if="${product.score == 4}" class="rating star4"><a href="#">상품평보기</a></h5>
+                                <h5 th:if="${product.score == 5}" class="rating star5"><a href="#">상품평보기</a></h5>
                             </nav>
                             <nav>
                                 <div class="org_price">

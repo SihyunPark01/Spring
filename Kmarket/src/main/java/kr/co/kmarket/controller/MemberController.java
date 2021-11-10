@@ -22,12 +22,15 @@ public class MemberController {
 	
 	@GetMapping("/member/join")
 	public String join() {
+		
 		return "/member/join";
 	}
 	
 	@GetMapping("/member/login")
-	public String login() {
+	public String login(String productCode, Model model) { //평소에는 0,  productCode int아닌 String으로 선언하라!
 				
+		model.addAttribute("productCode", productCode);
+		
 		return "/member/login";
 	}
 	
@@ -36,11 +39,16 @@ public class MemberController {
 		
 		MemberVo vo = service.selectMember(uid, pass);
 		
-		if(vo == null) {
-			return "/member/login";
-		}else {
+		if(vo != null) {
 			sess.setAttribute("sessMember", vo);
-			return "redirect:/index";
+			
+			if(vo.getProductCode() > 0) {
+				return "redirect:/product/view?productCode="+vo.getProductCode();
+			}else {
+				return "redirect:/";
+			}
+		}else {
+			return "redirect:/member/login?success=100";
 		}
 		
 	}

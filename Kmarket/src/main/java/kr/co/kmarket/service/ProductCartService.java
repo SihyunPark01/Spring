@@ -21,6 +21,11 @@ public class ProductCartService {
 	public void insertCart(ProductCartVo vo) {
 		dao.insertCart(vo);
 	}
+	
+	public int selectCountCart(ProductCartVo vo) {
+		return dao.selectCountCart(vo);
+	}
+
 	public void selectCart() {}
 	public void selectCarts(){}
 	public void updateCarts(){}

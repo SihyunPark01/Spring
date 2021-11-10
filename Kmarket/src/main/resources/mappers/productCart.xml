@@ -16,9 +16,16 @@
 			`total`=#{total}, 
 			`rdate`=NOW();
 	</insert>
-	<insert id="selectCart"></insert>
-	<insert id="selectCarts"></insert>
-	<insert id="updateCart"></insert>
-	<insert id="deleteCart"></insert>
+	
+	<select id="selectCountCart" resultType="int"> 
+		SELECT COUNT(`cartId`) FROM `km_product_cart`
+		WHERE 
+			`uid`=#{uid} AND `productCode`=#{productCode};
+	</select >
+	
+	<select id="selectCart"></select>
+	<select id="selectCarts"></select>
+	<update id="updateCart"></update>
+	<delete id="deleteCart"></delete>
 	
 </mapper>

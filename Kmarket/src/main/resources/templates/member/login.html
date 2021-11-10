@@ -13,6 +13,7 @@
             <div id="member-login">
                 <img src="../img/member_txt_login.gif" alt="로그인" />
 				<form th:action="@{/member/login}" method="post">     <!-- 컨트롤러주소값으로 넘겨주는 놈이니까 -->
+					<input type="hidden" name="productCode" th:if="${productCode}" th:value="${productCode}"/> <!-- 카트에 담은 후 로그인페이지로 넘어올때 productCode파라미터를 들고 로그인페이지로 오니까 얘가 생기는거지 -->
 					<div>
 						<label>
 							<span><img src="../img/member_txt_id.gif" alt="아이디"></span> 

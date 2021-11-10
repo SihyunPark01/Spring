@@ -37,4 +37,9 @@ public class MemberVo {
 	private String etc3;
 	private String etc4;
 	private String etc5;
+	
+	//추가필드
+	private int productCode;
+	
+	
 }
