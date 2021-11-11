@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <title>케이마켓::로그인</title>
     <link rel="stylesheet" th:href="@{/css/member.css}">
+    <script th:inline="javascript">
+    	var success = [[${success}]];
+    	
+    	if(success == '101'){
+    		alert('비밀번호가 일치하지 않습니다.');
+    	}else if(success == '201'){
+    		alert('장바구니를 확인하시려면 로그인을 하셔야 합니다.'); //로그인 후에 바로 장바구니로 가려면?
+    	}
+    </script>
+    
+    
 </head>
 <body>
     <div id="member-wrapper">

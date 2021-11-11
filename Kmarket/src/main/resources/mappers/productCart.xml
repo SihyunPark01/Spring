@@ -24,8 +24,26 @@
 	</select >
 	
 	<select id="selectCart"></select>
-	<select id="selectCarts"></select>
+	
+	
+	<select id="selectCarts" resultType="kr.co.kmarket.vo.ProductCartVo">
+		SELECT a.*, b.cate1, b.cate2, b.name, b.thumb1 FROM `km_product_cart` AS a   <!-- productCartVo에 name과 thumb1 추가필드 생성할 생각해! -->
+		JOIN `km_product` AS b
+		ON a.productCode = b.productCode
+		WHERE `uid`=#{uid}
+		ORDER BY `cartId` ASC;
+	</select>	
+
+
 	<update id="updateCart"></update>
-	<delete id="deleteCart"></delete>
+	
+	<delete id="deleteCart">
+		DELETE FROM `km_product_cart` 
+		WHERE `cartId` IN 
+		<!-- mybatis문법! 원래 sql은 IN(1, 32, 54...)뭐 이런식으로 쓰지만  -->
+		<foreach collection="array" item="cartId" open="(" close=")" separator=","> 
+			#{cartId}
+		</foreach>
+	</delete>
 	
 </mapper>

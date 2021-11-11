@@ -27,10 +27,10 @@ public class MemberController {
 	}
 	
 	@GetMapping("/member/login")
-	public String login(String productCode, Model model) { //평소에는 0,  productCode int아닌 String으로 선언하라!
+	public String login(String productCode, String success, Model model) { //평소에는 0,  productCode int아닌 String으로 선언하라!
 				
 		model.addAttribute("productCode", productCode);
-		
+		model.addAttribute("success", success);
 		return "/member/login";
 	}
 	

@@ -15,10 +15,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import kr.co.kmarket.service.ProductCartService;
+import kr.co.kmarket.service.ProductOrderService;
 import kr.co.kmarket.service.ProductService;
 import kr.co.kmarket.vo.CategoriesVo;
 import kr.co.kmarket.vo.MemberVo;
 import kr.co.kmarket.vo.ProductCartVo;
+import kr.co.kmarket.vo.ProductOrderVo;
 import kr.co.kmarket.vo.ProductVo;
 import kr.co.kmarket.vo.SearchVo;
 
@@ -29,12 +31,28 @@ public class ProductController {
 	private ProductService service;
 	@Autowired
 	private ProductCartService cartService;
+	@Autowired
+	private ProductOrderService orderService;
 	
 	
 	
 	@GetMapping("/product/cart")
-	public String cart() {
-		return "/product/cart";
+	public String cart(HttpSession sess, Model model) {
+		
+		//로그인 여부 확인
+		MemberVo vo = (MemberVo) sess.getAttribute("sessMember");
+		
+		if(vo != null) {
+			
+				List<ProductCartVo> cartProducts = cartService.selectCarts(vo.getUid());
+				model.addAttribute("cartProducts", cartProducts);
+				
+			return "/product/cart";
+			
+		}else {
+			
+			return "redirect:/member/login?success=201";
+		}
 	}
 	
 	@ResponseBody
@@ -52,6 +70,24 @@ public class ProductController {
 		
 		return new Gson().toJson(json);
 	}
+	
+	@GetMapping("/product/cartDelete")
+	public String cartDelete(int[] cartIds) { 
+		
+		int result = cartService.deleteCart(cartIds);
+		
+		JsonObject json = new JsonObject();
+		json.addProperty("result", result);
+		
+		return new Gson().toJson(json);
+				
+		
+		/*
+		for(int cartId : cartIds) {
+			System.out.println("cartId : "+cartId); 확인작업, 이렇게 하면 콘솔창에 cartId 뜸!
+		}*/
+	}
+	
 
 	@GetMapping("/product/list")
 	public String list(ProductVo vo, Model model, String pg) {
@@ -88,9 +124,35 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product/order")
-	public String order() {
+	public String order(int[] cartIds) {
 		return "/product/order";
 	}
+	
+	
+	@ResponseBody
+	@PostMapping("/product/order")
+	public String order(ProductOrderVo vo) {
+		
+		// 장바구니 주문하기 상품 주문 테이블 저장
+		orderService.insertOrder(vo); //여기 vo 안에 orderId가 있음
+
+		// 주문 테이블 Insert 후 주문번호 가져오기
+		int orderId = vo.getOrderId();
+		
+		// 주문번호 상품코드 입력하기
+		for(int productCode : vo.getProductCodes()) {
+			
+			orderService.insertOrderDetail(orderId, productCode);
+		}
+		
+		JsonObject json = new JsonObject();
+		json.addProperty("result", 1);
+		
+		return new Gson().toJson(json);
+		
+	}
+	
+	
 	@GetMapping("/product/order-complete")
 	public String orderComplete() {
 		return "/product/order-complete";
